@@ -1,31 +1,46 @@
+import { format, formatDistanceToNow } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
 
 
-export function Post(){
+export function Post({author, content, publishedAt}: any){
+
+  const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'ás' HH:mm'h'", {
+    locale: ptBR
+  });
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true
+  })
+  
   return(
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar userUrl='https://github.com/diego3g.png'/>
+          <Avatar avatar_url={author.avatarUrl}/>
           <div className={styles.authorInfo}>
-            <strong>Deigo Fernandes</strong>
-            <span>Web Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
-        <time title='9 de Abril ás 20:00h' dateTime='2023-04-09 20:00'>Publicado há 1h</time>
+        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
+          {publishedDateRelativeToNow}
+        </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala pessoal 👋</p>
-        <p>Finalmente finalizei meu novo site/portfólio. Foi um baita desafio criar todo o design e codar na unha, mas consegui 💪🏻 </p>
-        <p>👉 <a href="#"> devonlane.design</a></p>
-        <p>
-          <a href="#">#uiux </a>
-          <a href="#">#userexperience</a>
-        </p>
+        {content.map(line => {
+          if(line.type === 'paragraph'){
+            return <p>{line.content}</p>
+          } else if(line.type === 'link'){
+            return <a href="#">{line.content}</a>
+          }
+        })}
       </div>
 
       <form className={styles.commentForm}>

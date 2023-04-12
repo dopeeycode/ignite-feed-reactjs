@@ -5,7 +5,7 @@ import styles from './Comment.module.css';
 export function Comment(){
   return(
     <div className={styles.comment}> 
-      <Avatar hasBorder={false} userUrl="https://github.com/dopeeycode.png" />
+      <Avatar hasBorder={false} avatar_url="https://github.com/dopeeycode.png" />
 
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>

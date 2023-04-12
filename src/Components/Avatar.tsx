@@ -2,13 +2,13 @@
 import styles from './Avatar.module.css';
 
 type userAvatar ={
-  userUrl: string,
+  avatar_url: string,
   hasBorder?: boolean
 }
 
 
-export function Avatar({userUrl, hasBorder = true}: userAvatar ){
+export function Avatar({avatar_url, hasBorder = true}: userAvatar ){
   return(
-    <img className={hasBorder ? styles.avatarWithBorder : styles.avatar} src={userUrl}/>
+    <img className={hasBorder ? styles.avatarWithBorder : styles.avatar} src={avatar_url}/>
   )
 }
