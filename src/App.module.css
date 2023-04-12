@@ -7,3 +7,24 @@
   gap: 2rem;
   align-items: flex-start;
 }
+
+
+@media (max-width: 768px ){
+  .wrapper {
+    grid-template-columns: 1fr;
+    font-size: 87.5%;
+  }
+}
+
+
+@media (max-width: 430px){
+  html{
+    font-size: 85%;
+  }
+}
+
+@media (max-width: 370px){
+  html{
+    font-size: 78%;
+  }
+}

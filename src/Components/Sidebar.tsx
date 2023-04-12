@@ -13,7 +13,7 @@ export function Sidebar(){
           src="https://github.com/dopeeycode.png"
           alt="Avatar" 
         />
-        <strong>Dopeey.</strong>
+        <strong>Italo Patricio</strong>
         <span>@dopeeycode</span>
       </div>
 
