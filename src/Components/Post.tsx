@@ -26,15 +26,13 @@ export function Post({author, content, publishedAt}: any){
     'Post bacana mano'
   ]);
 
-
   function handleCreateNewComment(e: Event){
     e.preventDefault()
 
-    const newCommentText = e.target.comment.value;
 
     setComment([...comments, newCommentText])
     SetNewCommentText('');
-    
+
   }
 
   function handleNewCommentText(e: Event){
@@ -59,9 +57,9 @@ export function Post({author, content, publishedAt}: any){
       <div className={styles.content}>
         {content.map(line => {
           if(line.type === 'paragraph'){
-            return <p>{line.content}</p>
+            return <p key={line.content}>{line.content}</p>
           } else if(line.type === 'link'){
-            return <a href="#">{line.content}</a>
+            return <a href="#" key={line.content}>{line.content}</a>
           }
         })}
       </div>
