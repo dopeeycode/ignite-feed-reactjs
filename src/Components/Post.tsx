@@ -1,15 +1,33 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
 
 
+interface Author{
+  name: string,
+  role: string,
+  avatarUrl: string
+}
 
-export function Post({author, content, publishedAt}: any){
+
+interface PostProps {
+  author: Author,
+  content: Content[],
+  publishedAt: Date
+}
+
+interface Content{
+  type: 'paragraph' | 'link';
+  content: string;
+}
+
+
+export function Post({author, content, publishedAt}: PostProps){
 
   const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'ás' HH:mm'h'", {
     locale: ptBR
@@ -26,24 +44,43 @@ export function Post({author, content, publishedAt}: any){
     'Post bacana mano'
   ]);
 
-  function handleCreateNewComment(e: Event){
-    e.preventDefault()
+  function handleCreateNewComment(event: FormEvent){
+    event.preventDefault()
 
 
     setComment([...comments, newCommentText])
     SetNewCommentText('');
 
   }
+  
 
-  function handleNewCommentText(e: Event){
-    SetNewCommentText(e.target.value);
+  function handleNewCommentText(event: ChangeEvent<HTMLTextAreaElement>){
+    event.target.setCustomValidity('')
+    SetNewCommentText(event.target.value);
   }
+
+  
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
+    event.target.setCustomValidity('Esse campo é obrigatório !')
+
+  }
+
+
+  function deleteComment(commentToDelete: string){
+    const commentsWithoutDeleteOne = comments.filter(comment => {
+      return comment !== commentToDelete
+    })
+
+    setComment(commentsWithoutDeleteOne)
+  }
+
+  const isNewCommentInputEmpty = newCommentText.length === 0;
   
   return(
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar avatar_url={author.avatarUrl}/>
+          <Avatar src={author.avatarUrl}/>
           <div className={styles.authorInfo}>
             <strong>{author.name}</strong>
             <span>{author.role}</span>
@@ -71,9 +108,15 @@ export function Post({author, content, publishedAt}: any){
           name='comment'
           value={newCommentText}
           placeholder='Deixe um comentário'
+          onInvalid={handleNewCommentInvalid}
+          required
         />  
         <footer>
-          <button type='submit'>Publicar</button>
+          <button 
+            disabled={isNewCommentInputEmpty}
+            type='submit'>
+              Publicar
+          </button>
         </footer>
       </form>
 
@@ -81,6 +124,7 @@ export function Post({author, content, publishedAt}: any){
         {comments.map((comment, index) => {
           return(
             <Comment 
+              onDeleteComment={deleteComment}
               key={index}
               content={comment}
             />
